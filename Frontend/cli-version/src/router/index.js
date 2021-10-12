@@ -6,24 +6,14 @@ const routes = [
     component: () => import('../views/Home.vue')
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: () => import('../views/Login.vue')
+      path: '/connexion',
+      name: 'Connexion',
+      component: () => import('../views/Connexion.vue')
   },
   {
-    path: '/signup',
-    name: 'Signup',
-    component: () => import('../views/Signup.vue')
-  },
-  {
-    path: '/loggedIn',
-    name: 'LoggedIn',
-    component: () => import('../views/LoggedIn.vue')
-  },
-  {
-    path: '/account',
-    name: 'Account',
-    component: () => import('../views/Account.vue')
+      path: '/inscription',
+      name: 'Inscription',
+      component: () => import('../views/Inscription.vue')
   },
   {
     path: '/messages',
@@ -36,4 +26,17 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes
 })
+router.beforeEach((to, from, next) => {
+  const publicPages = ['/', '/connexion', '/inscription'];
+  const authRequired = !publicPages.includes(to.path);
+  const loggedIn = localStorage.getItem('userId');
+  const loggedToken = localStorage.getItem('token');
+
+  if (authRequired && !loggedIn && !loggedToken) {
+    return next('/connexion');
+  }
+  next();
+})
+
+
 export default router
