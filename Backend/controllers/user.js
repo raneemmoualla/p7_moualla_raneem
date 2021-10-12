@@ -25,6 +25,8 @@ exports.findOneUser = (req, res, next) => {
     userInfo.name = user.user_name
     userInfo.mail = user.user_email
     userInfo.date = user.user_dateInscription
+    userInfo.avatar = user.user_avatar
+  
   })
   .then(() => {
     Comment.count({ where: {comment_user: req.params.id} })
@@ -33,7 +35,7 @@ exports.findOneUser = (req, res, next) => {
     })
   })
   .then(() => {
-    Message.count({ where: {message_user: req.params.id} })
+    Message.count({ where: {userID: req.params.id} })
     .then(messageCount => {
       userInfo.msgcount = messageCount
       res.status(200).json(userInfo)

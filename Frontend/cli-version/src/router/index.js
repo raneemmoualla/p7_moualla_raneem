@@ -2,23 +2,33 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: () => import('../views/Home.vue'),
+    name: 'Accueil',
+        component: () => import('../components/Accueil'),
   },
   {
       path: '/connexion',
       name: 'Connexion',
-      component: () => import('../views/Connexion.vue'),
+      component: () => import('../components/Connexion'),
   },
   {
       path: '/inscription',
       name: 'Inscription',
-      component: () => import('../views/Inscription.vue')
+      component: () => import('../components/Inscription')
+    },
+    {
+        path: '/compte',
+        name: 'compte',
+        component: () => import('../components/Compte')
   },
   {
     path: '/messages',
     name: 'Messages',
-    component: () => import('../views/Messages.vue')
+    component: () => import('../components/Messages')
+  },
+  {
+      path: '/commentaires/:id',
+      name: 'Commentaires',
+      component: () => import('../components/Commentaires')
   }
 ]
 

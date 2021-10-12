@@ -1,6 +1,6 @@
 <template>
 <div>    
-    <NavHeader></NavHeader>
+    <!-- <NavHeader></NavHeader> -->
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 col-md-10 col-lg-4">
@@ -35,22 +35,17 @@
     </div>
 </div>
 </template>
-
 <style>
     body {
         background-color: #091F43;
     }
 </style>
-
 <script>
 import axios from 'axios'
 import router from '../router'
-import NavHeader from '../components/NavHeader'
 export default {
     name: "Connexion",
-    components:{
-        NavHeader
-    },
+    
     data () {
         return {
             InputEMail:'',
@@ -66,6 +61,7 @@ export default {
                 user_password: this.InputPassword
             })
             .then(function (response) {
+                localStorage.setItem('connected','false')
                 localStorage.setItem('token',response.data.token)
                 localStorage.setItem('userId',response.data.userId)
                 localStorage.setItem('userName',response.data.userName)
@@ -78,4 +74,4 @@ export default {
         }
     }
 }
-</script> 
+</script>
