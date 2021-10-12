@@ -48,7 +48,7 @@ export default {
     
     data () {
         return {
-            InputEMail:'',
+            InputEmail:'',
             InputPassword:'',
             submitted:false
         }
@@ -57,15 +57,16 @@ export default {
         handleSubmit () {
             this.submitted = true;
             axios.post('http://127.0.0.1:3000/api/auth/login', {
-                user_email: this.InputEmail,
-                user_password: this.InputPassword
+               email: this.InputEmail,
+                password: this.InputPassword
             })
             .then(function (response) {
-                localStorage.setItem('connected','false')
+                 console.log(response)
                 localStorage.setItem('token',response.data.token)
                 localStorage.setItem('userId',response.data.userId)
                 localStorage.setItem('userName',response.data.userName)
-                localStorage.setItem('userAvatar',response.data.userAvatar)
+                 localStorage.setItem('avatar',response.data.avatar)
+                localStorage.setItem('role',response.data.role)
                 router.push('/messages')
             })
             .catch(function (error) {
