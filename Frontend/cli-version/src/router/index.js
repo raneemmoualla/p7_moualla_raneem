@@ -3,12 +3,12 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('../views/Home.vue')
+    component: () => import('../views/Home.vue'),
   },
   {
       path: '/connexion',
       name: 'Connexion',
-      component: () => import('../views/Connexion.vue')
+      component: () => import('../views/Connexion.vue'),
   },
   {
       path: '/inscription',

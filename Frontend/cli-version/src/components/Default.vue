@@ -21,4 +21,10 @@
             </div>
         </div>
     </div>
-</template> 
+</template>
+
+<script>
+export default {
+    Name: "Default"
+}
+</script>
