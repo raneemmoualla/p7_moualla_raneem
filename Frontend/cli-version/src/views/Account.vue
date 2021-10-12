@@ -4,7 +4,7 @@
             <div class="row">
                 <nav class="col navbar navbar-expand-md navbar-dark">
                     <a class="navbar-brand" href="#">
-                        <img src="../assets/logo_white.svg" alt="logo groupomania" height="40" class="my-0"/>
+                        <img src="" alt="logo groupomania" height="40" class="my-0"/>
                     </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
