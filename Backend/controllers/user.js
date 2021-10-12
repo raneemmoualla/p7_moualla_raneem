@@ -53,6 +53,7 @@ exports.findOneUser = (req, res, next) => {
 // logique métier : modifier un utilisateur
 exports.modifyUser = (req, res, next) => {
   // gestion d'ajout/modification image de profil
+  console.log(req.body)
   const userObject = req.body.avatar ?
     {
       ...req.body.userId,
