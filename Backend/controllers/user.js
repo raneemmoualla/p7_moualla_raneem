@@ -53,15 +53,15 @@ exports.findOneUser = (req, res, next) => {
 // logique métier : modifier un utilisateur
 exports.modifyUser = (req, res, next) => {
   // gestion d'ajout/modification image de profil
-  console.log(req.body)
-  const userObject = req.body.avatar ?
+  //console.log(req.file)
+  const userObject = req.file ?
     {
       ...req.body.userId,
-      avatar: `${req.body.avatar}`
+      avatar: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ... req.body};
 
   User.update({ ...userObject, id:  req.params.id}, { where: {id: req.params.id} })
-  .then(() => res.status(200).json({ message: 'Utilisateur modifié !'}))
+  .then(() => res.status(200).json({ ...userObject }))
   .catch(error => res.status(400).json({ error }));
 };
 
