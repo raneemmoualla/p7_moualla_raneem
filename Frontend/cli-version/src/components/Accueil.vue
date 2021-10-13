@@ -14,7 +14,7 @@
                         <p>Bonne navigation !</p>
                     </div>
                     <div class="card-footer bg-light d-flex justify-content-between">
-                        <span class="text-dark">© 2020 Groupomania RSi</span>
+                        <span class="text-dark">© 2021 Groupomania RSi</span>
                         <a href="email:contact@groupomania.fr">Contact</a>
                     </div>
                 </div>
