@@ -35,14 +35,16 @@
                                                     <div class="col-12 justify-content-center">
                                                         <div class="form-group justify-content-center">
                                                             <label for="File" class="sr-only">Choisir une nouvelle photo</label>
-                                                             <input @change="onFileChange()" type="file" ref="file" name="image" class="form-control-file" id="File" accept=".jpg, .jpeg, .gif, .png">
+                                                               <input @change="onFileChange()" type="file" ref="file" name="image" class="form-control-file" id="File" accept=".jpg, .jpeg, .gif, .png" :class="{ 'is-invalid': submitted && !file }">
+                                                            <div v-show="submitted && !file" class="invalid-feedback">Une nouvelle photo est requise !</div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <div class="row w-100 justify-content-spacebetween">
-                                                        <div class="col-6"><a data-dismiss="modal" class="btn btn-sm btn-secondary btn-block">Annuler</a></div>
-                                                        <div class="col-6"><button type="submit" class="btn btn-sm btn-success btn-block">Valider</button></div>
+                                                        <div class="col-6"><a data-dismiss="modal" class="btn btn-secondary btn-block">Annuler</a></div>
+                                                        <!-- <div class="col-6"><a @click="updateAvatar()" class="btn btn-success btn-block">Valider</a></div> -->
+                                                        <div class="col-6"><button type="submit" class="btn btn-success btn-block">Valider</button></div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -83,12 +85,13 @@
 
 <script>
 import axios from 'axios'
+import Swal from 'sweetalert2'
 export default {
     name: "Compte",
     data(){
         return{
            userName:"", email:"", role:"", createdAt:"", messagesCount:"", commentsCount:"", avatar:"",
-            newAvatar:"/images/avatars/default_user.jpg", file:''
+             newAvatar:"/images/avatars/default_user.jpg", file:null, submitted:false
         }
     },
     methods:{
@@ -97,9 +100,9 @@ export default {
             this.newAvatar = URL.createObjectURL(this.file)
         },
          updateAvatar() {
-            let formData = new FormData()
+         this.submitted = true
+            const formData = new FormData()
              formData.append('image', this.file);
-           console.log(formData)
             axios.put('http://127.0.0.1:3000/api/users/' + localStorage.getItem('userId'), 
                 formData, 
                 { 
@@ -108,19 +111,39 @@ export default {
                     'Authorization': 'Bearer ' + localStorage.getItem('token')
                 }
           })
-            .then(res => {
+           .then(function(res) {
                 localStorage.setItem('avatar', res.data.avatar)
-                location.reload()
+               Swal.fire({
+                    text: 'La photo de profil à été mise à jour !',
+                    footer: 'Redirection en cours...',
+                    icon: 'success',
+                    timer: 1000,
+                    showConfirmButton: false,
+                    timerProgressBar: true,
+                    willClose: () => { this.file = null; location.reload() }
+                })
             })
-            .catch(function(){
-                alert('Oups problème !')
+           .catch(function(error) {
+                const codeError = error.message.split('code ')[1]
+                let messageError = ""
+                switch (codeError){
+                    case '400': messageError = "La photo de profil n'a pas été mise à jour !";break
+                    case '401': messageError = "Requête non-authentifiée !";break
+                }
+                Swal.fire({
+                    title: 'Une erreur est survenue',
+                    text: messageError,
+                    icon: 'error',
+                    timer: 1500,
+                    showConfirmButton: false,
+                    timerProgressBar: true,
+                })  
             })
         }
     },
     created: function(){
         axios.get('http://127.0.0.1:3000/api/users/' + localStorage.getItem('userId'),{ headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')} })
             .then(user => {
-               // console.log(user)
                 this.userName = user.data.userName
                 this.email = user.data.email
                 this.role = user.data.role
@@ -129,6 +152,23 @@ export default {
                 this.commentsCount = user.data.commentsCount
                 this.avatar = user.data.avatar
             })
+           .catch(function(error) {
+                const codeError = error.message.split('code ')[1]
+                let messageError = ""
+                switch (codeError){
+                    case '400': messageError = "Vos informations non pas été récuperées !";break
+                    case '401': messageError = "Requête non-authentifiée !";break
+                }
+                Swal.fire({
+                    title: 'Une erreur est survenue',
+                    text: messageError,
+                    icon: 'error',
+                    timer: 1500,
+                    showConfirmButton: false,
+                    timerProgressBar: true,
+                })  
+            })
+        }   
     }
-}
+
 </script> 

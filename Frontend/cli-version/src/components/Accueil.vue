@@ -33,7 +33,5 @@ export default {
 body {
   background-color: #091F43;
 }
-hr {
-  background-color:white;
-}
+
 </style> 

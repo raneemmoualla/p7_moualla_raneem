@@ -5,8 +5,6 @@ module.exports = (sequelize, DataTypes) => {
   //initialize a model, representing a table in the DB, 
   //with attributes and options.
   Comment.init({
-   //userId: DataTypes.INTEGER,
-    //messageId: DataTypes.STRING,
     comment: DataTypes.STRING,
   }, {
     sequelize,

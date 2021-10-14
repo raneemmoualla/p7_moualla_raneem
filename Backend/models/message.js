@@ -5,7 +5,6 @@ module.exports = (sequelize, DataTypes) => {
   //initialize a model, representing a table in the DB,
   // with attributes and options.
   Message.init({
-    //userId: DataTypes.INTEGER,
     message: DataTypes.STRING,
     messageUrl: DataTypes.STRING,
     

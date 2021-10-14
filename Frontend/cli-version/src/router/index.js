@@ -17,7 +17,7 @@ const routes = [
     },
     {
         path: '/compte',
-        name: 'compte',
+        name: 'Compte',
         component: () => import('../components/Compte')
   },
   {
@@ -26,10 +26,30 @@ const routes = [
     component: () => import('../components/Messages')
   },
   {
+    path: '/message/edit/:id',
+    name: 'Message Edit',
+    component: () => import('../components/MessageEdit')
+},
+{
+    path: '/message/drop/:id',
+    name: 'Message Drop',
+    component: () => import('../components/MessageDrop')
+},
+  {
       path: '/commentaires/:id',
       name: 'Commentaires',
       component: () => import('../components/Commentaires')
-  }
+    },
+    {
+        path: '/commentaire/edit/:id',
+        name: 'Commentaires Edit',
+        component: () => import('../components/CommentaireEdit')
+    },
+    {
+        path: '/commentaire/drop/:id',
+        name: 'Commentaires Drop',
+        component: () => import('../components/CommentaireDrop')
+    }
 ]
 
 const router = createRouter({
