@@ -1,63 +1,69 @@
-// imports
-const db = require("../models");
-const User = db.users;
+const db        = require("../models");
+const User      = db.users;
+const bcrypt    = require("bcrypt");
+const jwt       = require("jsonwebtoken");
 
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const { sequelize } = require("../models");
+// SIGNUP / Inscription.
 
-// Logiques métiers pour les utilisateurs
-// Création de nouveaux utilisateurs (Post signup)
-exports.signup = (req, res, next) => {
-    // Hash du mot de passe avec bcrypt
-    bcrypt.hash(req.body.password, 10)
-    .then(hash => {
-        // Création du nouvel utilisateur
-        const user = new User({
-            userName: req.body.userName,
-            email: req.body.email,
-            password: hash,
+exports.signup = (req, res, next) => {   
+  if ( !req.body.userName || !req.body.email || !req.body.password ) {
+    return res.status(400).json({message: "one ore more paramaters empty"})
+}
+    const nameRegex = /(.*[a-z]){3,30}/;
+    const mailRegex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
+    const pwdRegex  = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/  
+
+  if (nameRegex.test(req.body.userName) && mailRegex.test(req.body.email) && pwdRegex.test(req.body.password)) {
+      bcrypt.hash(req.body.password, 10)    // on hashe le mot de passe avec un salt de 10                                               
+        .then(hash => {                                                         
+          const user = new User({ 
+            userName:   req.body.userName,                                                        
+            email:      req.body.email,     // on sauve un mail encodé
+            password:   hash                // et on assigne le hash obtenu comme valeur de la propriété password de l'objet user 
+          });
+          user.save()                       // et on sauve tout ça dans la base de données                                            
+        .then((user) => { 
+          if (user) {
+            return res.status(201).json({ message: 'new user created' })
+          }
+        })            
+        .catch((error) => {res.status(401).json({ error})});  
         })
-        // Sauvegarde dans la base de données
-        user.save()
-        .then(() => res.status(201).json({ message: 'Utilisateur créé !'}))
-        .catch(error => res.status(401).json({ error }));
-    })
-    .catch(error => res.status(500).json({ error }));
+      .catch((error) => { res.status(500).json({message: " erreur serveur " + error})})
+    } else {
+      res.status(400).json({message: " incorrect parameters "})
+    }               
 };
+  
+// LOGIN / Connexion de l'utilisateur
 
-// Création de connexion d'utilisateur enregistré (Post login)
 exports.login = (req, res, next) => {
-    // Recherche d'un utilisateur dans la base de données
-    User.findOne({where: { email: req.body.email }})
-    .then(user => {
-      // Si l'utilisateur est inactif
-      if(user.isActive === false ){return res.status(403).json({ error: 'Utilisateur supprimé !'})}
-      // Si on ne trouve pas l'utilisateur     
-        if(!user) {
-            return res.status(404).json({ error: 'Utilisateur non trouvé !'})
-        }
-        // On compare le mot de passe de la requete avec celui de la base de données
-        bcrypt.compare(req.body.password, user.password)
-        .then(valid => {
-            if(!valid) {
-                return res.status(401).json({ error: 'Mot de passe incorrect !'})
-            }
-            res.status(200).json({
-                message: 'Utilisateur connecté !',
-                userId: user.id,
-                role: user.isAdmin,
-                userName : user.userName,
-                avatar : user.avatar,
-                // Création d'un token pour sécuriser le compte de l'utilisateur
-                token: jwt.sign(
-                    { userId: user.id },
-                    process.env.RND_TKN,
-                    { expiresIn: '24h' }
-                )
-            });
-        })
-        .catch(error => res.status(501).json({ error }));
+  if ( !req.body.email || !req.body.password ) {
+    return res.status(400).json({message: "one ore more paramaters empty"})
+}
+  User.findOne({
+    where: {
+      email: req.body.email
+    }
+    })       
+  .then(user => {
+    if (!user) {  
+      return res.status(404).json({ message: 'email not found' }); 
+    }
+    bcrypt.compare(req.body.password, user.password)        
+    .then(valid => {    
+      if (!valid) {                                             
+        return res.status(401).json({ message: "mot de passe non valide" });           
+      } 
+      res.status(200).json({
+        message:    "Connexion réussie",
+        userId:     user.id,
+        role:       user.isAdmin,
+        userName :  user.userName,
+        token: jwt.sign( { userId: user.id }, process.env.TKN_SECRET, { expiresIn: '24h' } )
+      })
     })
-    .catch(error => res.status(502).json({ error }));
-};  
+    .catch(error => res.status(500).json({ error }));                             
+    })
+  .catch(error => res.status(500).json({ error }));                                 
+};

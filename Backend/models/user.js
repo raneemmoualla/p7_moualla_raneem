@@ -1,20 +1,32 @@
-'use strict';
-const { Model } = require('sequelize');
+// modele class USER pour la base de données.
+
+const { Model } = require("sequelize")
+
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {};
-  //initialize a model, representing a table in the DB,
-  // with attributes and options.
-  User.init({
-    userName: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    avatar: DataTypes.STRING,
-    isAdmin: DataTypes.BOOLEAN,
-    isActive: DataTypes.BOOLEAN,
-  }, {
-    sequelize,
-    modelName: 'User',
-   
-  });
-  return User;
-};
+    class User extends Model {}
+    User.init({
+        userName: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        email: {
+            type: DataTypes.STRING,
+            unique: true,
+            allowNull: false
+        },
+        password: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        isAdmin: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        }
+    }, 
+    {
+        sequelize,
+        modelName: "User"
+    })
+    return User
+}
