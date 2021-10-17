@@ -2,7 +2,7 @@
     <main class="container">    
         <div class="col-12">
             <div class="col-12 ">
-                <h1 v-if= 'this.messages.length !== 0' class="col-12 my-2 btn  btn-block btn-info font-weight-bold" style="background-color: #138400; cursor:default">Dernières Publications</h1>   
+                <h1 v-if= 'this.messages.length !== 0' class="col-12 my-2 btn  btn-block btn-info font-weight-bold" style="background-color: #3366ff; cursor:default">Dernières Publications</h1>   
                 <h1  v-else class='col-12 my-2 btn  btn-block btn-danger font-weight-bold' style="cursor:default"> Aucune publication pour l'instant, soyez le premier à en créer une ! </h1>
             </div>
             <section id="filPrincipal" class="row">
