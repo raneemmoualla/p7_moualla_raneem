@@ -4,7 +4,7 @@
     <main class="container">  
          <!-- titre -->
         <div class="row mb-4 rounded">
-            <p class="col-12 my-2 btn  btn-block btn-info badgeTopColor font-weight-bold" style="background-color: #138400" >Vous consultez les commentaires</p>  
+            <p class="col-12 my-2 btn  btn-block btn-info badgeTopColor font-weight-bold" style="background-color: #3366ff" >Vous consultez les commentaires</p>  
             <Home></Home>
         </div>
         <div class="row">
@@ -110,7 +110,8 @@ export default {
     created: function() {        
         let MessageId   = localStorage.getItem('MessageId')
         let self        = this;
-        axios.get("http://localhost:3000/api/messages/" + MessageId,  { headers: {"Authorization": "Bearer " + localStorage.getItem("token")} })
+        axios.get("http://localhost:3000/api/messages/" + MessageId, 
+         { headers: {"Authorization": "Bearer " + localStorage.getItem("token")} })
         .then((res) => {
             console.log(res)
             self.creation           = res.data.createdAt.slice(0,10).split("-").reverse().join(".");
@@ -124,7 +125,8 @@ export default {
             alert(error)
         })
         let id = localStorage.getItem('userId');
-        axios.get("http://localhost:3000/api/users/" + id, { headers: {"Authorization": "Bearer " + localStorage.getItem("token")} })
+        axios.get("http://localhost:3000/api/users/" + id, 
+        { headers: {"Authorization": "Bearer " + localStorage.getItem("token")} })
         .then(res => {  
             self.isAdmin                = res.data.isAdmin;
             self.nameCurrentUser        = res.data.userName.charAt(0).toUpperCase() + res.data.userName.slice(1);
@@ -133,7 +135,8 @@ export default {
         })
         .catch((error)=> { console.log(error) 
         })  
-        axios.get("http://localhost:3000/api/comments/" + MessageId,  { headers: {"Authorization": "Bearer " + localStorage.getItem("token")} })
+        axios.get("http://localhost:3000/api/comments/" + MessageId,
+          { headers: {"Authorization": "Bearer " + localStorage.getItem("token")} })
         .then( function (res) {
             self.comments = res.data;  
             console.log(self.comments)

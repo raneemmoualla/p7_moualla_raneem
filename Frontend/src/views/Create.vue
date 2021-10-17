@@ -57,23 +57,21 @@ export default {
     methods: {
         callName() {
             let name = localStorage.getItem('userName');
-            return name.charAt(0).toUpperCase() + name.slice(1);
-        },
+            return name.charAt(0).toUpperCase() + name.slice(1); },
         selectFile() {
             this.file = this.$refs.file.files[0];
-            this.newImage = URL.createObjectURL(this.file)
-        },
+            this.newImage = URL.createObjectURL(this.file)  },
         send() {
             if ( !this.file || !localStorage.getItem('userName') || !this.newMessage || this.newMessage > 1500 ) {
                     this.isInvalid = true;
-
                     console.log("ligne 69" + this.file)
             } else {
                 const formData = new FormData()
                 formData.append("image", this.file)
                 formData.append("UserId", localStorage.getItem('userId'))
                 formData.append("message", this.newMessage.toString())
-                axios.post("http://localhost:3000/api/messages/", formData, { headers: { "Authorization":"Bearer " + localStorage.getItem("token")}})
+                axios.post("http://localhost:3000/api/messages/", 
+                    formData, { headers: { "Authorization":"Bearer " + localStorage.getItem("token")}})
                 .then(()=> {
                     this.UserId = ""
                     this.newMessage = ""
