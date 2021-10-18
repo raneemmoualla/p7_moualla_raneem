@@ -1,4 +1,4 @@
-<!-- Pade d'administration du site -->
+<!-- Page d'administration du site -->
 
 <template>
     <div class="container">    
